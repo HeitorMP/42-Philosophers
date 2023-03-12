@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/02/22 19:43:29 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/03/12 16:18:51 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ static void	print_philo(t_root *root)
 	}
 }
 
-void *catch_fork(void *arg)
+void *action(void *arg)
 {
-	t_root root;
-	*root = (t_root *)arg;
+	t_root *root;
+
+	root = (t_root *)arg;
+
+
     return NULL;
 }
 
@@ -81,8 +84,8 @@ int	main(int argc, char **argv)
 	pthread_t thread1;
 	pthread_t thread2;
 
-    pthread_create(&thread1, NULL, catch_fork, &root);
-	pthread_create(&thread2, NULL, catch_fork, &root);
+    pthread_create(&thread1, NULL, action, &root);
+	pthread_create(&thread2, NULL, action, &root);
 
 	if (init_input(argc, argv, &root) == FALSE)
 		return(1);

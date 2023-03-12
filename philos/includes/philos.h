@@ -46,10 +46,17 @@ typedef struct s_philo
 	int		has_right_fork;
 }	t_philo;
 
+typedef struct s_mutex
+{
+	pthread_mutex_t lock_left_fork;
+	pthread_mutex_t lock_right_fork;
+}	t_mutex;
+
 typedef struct s_root
 {
 	t_input	input;
 	t_philo	*philos;
+	t_mutex	forks;
 }	t_root;
 
 long long	time_in_milliseconds(void);
