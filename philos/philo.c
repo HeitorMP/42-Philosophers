@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/03/12 16:18:51 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/03/13 12:28:57 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,20 @@ static void	print_philo(t_root *root)
 
 void *action(void *arg)
 {
-	t_root *root;
+	t_root *root = (t_root *)arg;
 
-	root = (t_root *)arg;
+	pthread_mutex_lock(root->forks->lock_left_fork);
 
+	int i = root->philo_id;
 
-    return NULL;
+	printf("Philo id: %d\n", root->philos[i].philo_id);
+	printf("Is alive: %d\n", root->philos[i].is_alive);
+	printf("Doing: %d\n", root->philos[i].action);
+	printf("------------------------------------------\n");
+	sleep(200);
+	pthread_mutex_unlock(root->forks->lock_left_fork);
+
+	return NULL;
 }
 
 int	main(int argc, char **argv)
@@ -84,14 +92,17 @@ int	main(int argc, char **argv)
 	pthread_t thread1;
 	pthread_t thread2;
 
-    pthread_create(&thread1, NULL, action, &root);
-	pthread_create(&thread2, NULL, action, &root);
-
 	if (init_input(argc, argv, &root) == FALSE)
 		return(1);
 	if (init_philo(&root) == FALSE)
 		return (1);
 	print_philo(&root);
+    pthread_create(&thread1, NULL, action, &root);
+	pthread_create(&thread2, NULL, action, &root);
+
+	pthread_join(thread1, NULL);
+	pthread_join(thread2, NULL);
+	
 	free_philos(&root);
 	return (0);
 }

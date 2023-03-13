@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:58 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/02/22 09:30:58 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/03/13 10:49:20 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ typedef struct s_input
 
 typedef struct s_philo
 {
-	int		philo_id;
-	int		time_to_die;
-	char	action;
-	int		is_alive;
-	int		has_left_fork;
-	int		has_right_fork;
+	int			philo_id;
+	int			time_to_die;
+	char		action;
+	int			is_alive;
+	int			has_left_fork;
+	int			has_right_fork;
+	pthread_t	thread;
 }	t_philo;
 
 typedef struct s_mutex
