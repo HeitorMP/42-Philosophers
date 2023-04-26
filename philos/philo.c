@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/03/13 12:28:57 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/04/26 17:23:59 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,59 +50,55 @@ The Thread Analyzer detects data-races that occur during the execution of a mult
 
 #include "./includes/philos.h"
 
-static void	print_philo(t_root *root)
+long long	is_event_end(long long event)
 {
-	int i = 0;
+	long long cur_time;
+	long long start_time;
 
-	while(i < root->input.number_of_philosophers)
+	start_time = time_in_milliseconds();
+	cur_time = 0;
+	while (1)
 	{
-		printf("Philo %d\n", i+1);
-		printf("Philo id: %d\n", root->philos[i].philo_id);
-		printf("Is alive: %d\n", root->philos[i].is_alive);
-		printf("Doing: %d\n", root->philos[i].action);
-		printf("Time to die: %d\n", root->philos[i].time_to_die);
-		printf("Has left fork: %d\n", root->philos[i].has_left_fork);
-		printf("Has right fork: %d\n", root->philos[i].has_right_fork);
-		printf("------------------------------------------\n");
-		i++;
+		cur_time = time_in_milliseconds() - start_time;
+		if (cur_time >= event)
+			return (1);
 	}
+	return (0);
 }
 
-void *action(void *arg)
+int	do_event(t_philo *philo, t_root *root, int event)
 {
-	t_root *root = (t_root *)arg;
-
-	pthread_mutex_lock(root->forks->lock_left_fork);
-
-	int i = root->philo_id;
-
-	printf("Philo id: %d\n", root->philos[i].philo_id);
-	printf("Is alive: %d\n", root->philos[i].is_alive);
-	printf("Doing: %d\n", root->philos[i].action);
-	printf("------------------------------------------\n");
-	sleep(200);
-	pthread_mutex_unlock(root->forks->lock_left_fork);
-
-	return NULL;
+		printf("%lld - philo: %d - ", root->curr_time, philo->philo_id);
+		if (event == 1)
+			printf("comendo:\n");
+		if (event == 2)
+			printf("pensando:\n");
+		if (event == 3)
+			printf("sofrendo por amor:\n");
+		if(is_event_end(root->input.time_to_eat))
+			philo->action++;
+		if (philo->action == 4)
+			philo->action = 1;
 }
 
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	t_root	root;
-	pthread_t thread1;
-	pthread_t thread2;
-
-	if (init_input(argc, argv, &root) == FALSE)
-		return(1);
-	if (init_philo(&root) == FALSE)
-		return (1);
-	print_philo(&root);
-    pthread_create(&thread1, NULL, action, &root);
-	pthread_create(&thread2, NULL, action, &root);
-
-	pthread_join(thread1, NULL);
-	pthread_join(thread2, NULL);
 	
-	free_philos(&root);
-	return (0);
+	init_input(argc, argv, &root);
+	init_philo(&root);
+	
+	long long start_time;
+	root.philo->action = 1;
+	start_time = time_in_milliseconds();
+	int i = 0;
+	while (1)
+	{
+		root.curr_time = time_in_milliseconds() - start_time;
+		do_event(&root.philo[i] ,&root, root.philo[i].action);
+		i++;
+		if (i == 2)
+			i = 0;
+	}
+	printf("morreu!");
 }

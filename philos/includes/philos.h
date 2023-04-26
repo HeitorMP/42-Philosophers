@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:58 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/03/13 10:49:20 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/04/26 16:48:52 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # define	TRUE 1
 # define	FALSE 0
 
-# define	IDLE 0
 # define	EATING 1
 # define	SLEEPING 2
 # define	THINKING 3
@@ -34,12 +33,12 @@ typedef struct s_input
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	times_each_philo_must_eat;
+	pthread_mutex_t *fork;
 }	t_input;
 
 typedef struct s_philo
 {
 	int			philo_id;
-	int			time_to_die;
 	char		action;
 	int			is_alive;
 	int			has_left_fork;
@@ -47,23 +46,17 @@ typedef struct s_philo
 	pthread_t	thread;
 }	t_philo;
 
-typedef struct s_mutex
-{
-	pthread_mutex_t lock_left_fork;
-	pthread_mutex_t lock_right_fork;
-}	t_mutex;
-
 typedef struct s_root
 {
-	t_input	input;
-	t_philo	*philos;
-	t_mutex	forks;
+	long long	curr_time;
+	t_philo		*philo;
+	t_input		input;
 }	t_root;
 
 long long	time_in_milliseconds(void);
 int			ft_atoi(const char *str);
 int			ft_str_is_numeric(char *str);
-void		free_philos(t_root *root);
-int			init_philo(t_root *root);
-int			init_input(int argc, char **argv, t_root *root);
+void		free_philos(t_philo *philo);
+void		init_philo(t_root *root);
+void		init_input(int argc, char **argv, t_root *root);
 #endif

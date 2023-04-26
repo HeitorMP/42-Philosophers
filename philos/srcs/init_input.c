@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_input.c                                       :+:      :+:    :+:   */
+/*   init_root->input->c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmaciel- <hmaciel-@student->42->fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:41:55 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/02/22 17:13:29 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/04/26 16:26:56 by hmaciel-         ###   ########->fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,8 @@ static int	check_input_errors(int argc, char **argv)
 	return (TRUE);
 }
 
-int	init_input(int argc, char **argv, t_root *root)
+void	init_input(int argc, char **argv, t_root *root)
 {
-	if (check_input_errors(argc, argv) == FALSE)
-		return (FALSE);
 	root->input.number_of_philosophers = ft_atoi(argv[1]);
 	root->input.time_to_die = ft_atoi(argv[2]);
 	root->input.time_to_eat = ft_atoi(argv[3]);
@@ -57,5 +55,4 @@ int	init_input(int argc, char **argv, t_root *root)
 	root->input.times_each_philo_must_eat = 0;
 	if (argc == 6)
 		root->input.times_each_philo_must_eat = ft_atoi(argv[5]);
-	return (TRUE);
 }
