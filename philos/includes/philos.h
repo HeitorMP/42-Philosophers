@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:58 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/04/26 16:48:52 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/02 10:24:34 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_input
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	times_each_philo_must_eat;
-	pthread_mutex_t *fork;
 }	t_input;
 
 typedef struct s_philo
@@ -51,6 +50,7 @@ typedef struct s_root
 	long long	curr_time;
 	t_philo		*philo;
 	t_input		input;
+	pthread_mutex_t *fork;
 }	t_root;
 
 long long	time_in_milliseconds(void);

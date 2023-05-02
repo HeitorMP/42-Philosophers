@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/04/26 17:23:59 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/02 14:53:20 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,60 @@ long long	is_event_end(long long event)
 	return (0);
 }
 
-int	do_event(t_philo *philo, t_root *root, int event)
+void	print_event(t_root *root)
 {
-		printf("%lld - philo: %d - ", root->curr_time, philo->philo_id);
-		if (event == 1)
-			printf("comendo:\n");
-		if (event == 2)
-			printf("pensando:\n");
-		if (event == 3)
+	int i = 0;
+	while (i < root->input.number_of_philosophers)
+	{
+		printf("%lld - philo: %d - ", root->curr_time, root->philo[i].philo_id);
+		if (root->philo[i].action == 0)
+			printf("is thinking\n");
+		if (root->philo[i].action == 1)
+			printf("is eating\n");
+		if (root->philo[i].action == 2)
+			printf("is sleeping\n");
+		if (root->philo[i].action == 3)
 			printf("sofrendo por amor:\n");
-		if(is_event_end(root->input.time_to_eat))
-			philo->action++;
-		if (philo->action == 4)
+		i++;
+	}
+}
+
+int	can_eat(t_philo *philo, t_root *root)
+{
+	if (root->philo->philo_id == root->input.number_of_philosophers)
+	{
+		if (pthread_mutex_lock(&root->fork[root->philo->philo_id - 1]) == 0 && pthread_mutex_lock(&root->fork[0]) == 0)
+		{
 			philo->action = 1;
+			return (1);
+		}
+	}
+	else
+	{
+		if (pthread_mutex_lock(&root->fork[root->philo->philo_id - 1]) == 0 && pthread_mutex_lock(&root->fork[root->philo->philo_id]) == 0)
+		{
+			philo->action = 1;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+void *myThreadFun(void *vargp)
+{
+	t_root *root;
+	root = (t_root *)vargp;
+
+	if (can_eat(root->philo, root))
+	{
+		if (is_event_end(root->input.time_to_eat))
+		{
+			pthread_mutex_unlock(&root->fork[root->philo->philo_id - 1]);
+			pthread_mutex_unlock(&root->fork[root->philo->philo_id]);
+			root->philo->action = 2;
+		}
+	}
+    return NULL;
 }
 
 int main(int argc, char **argv)
@@ -87,18 +128,25 @@ int main(int argc, char **argv)
 	
 	init_input(argc, argv, &root);
 	init_philo(&root);
+	int i = 0;
+	while (i < root.input.number_of_philosophers)
+	{
+		pthread_mutex_init(&root.fork[i], NULL);
+		i++;
+	}
+
+	i = 0;
 	
 	long long start_time;
-	root.philo->action = 1;
+	
 	start_time = time_in_milliseconds();
-	int i = 0;
-	while (1)
+	while (i < root.input.number_of_philosophers)
 	{
 		root.curr_time = time_in_milliseconds() - start_time;
-		do_event(&root.philo[i] ,&root, root.philo[i].action);
+		pthread_create(&root.philo[i].thread, NULL, myThreadFun, &root);
+		pthread_join(root.philo[i].thread, NULL);
+		print_event(&root);
 		i++;
-		if (i == 2)
-			i = 0;
 	}
 	printf("morreu!");
 }
