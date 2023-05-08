@@ -6,7 +6,7 @@ FLAGS			:= -Wall -Wextra -Werror -g -lpthread #-fsanitize=thread
 RM				:= rm -f
 
 # SOURCE FILES
-SRCS        :=  philo.c srcs/init_input.c srcs/utils.c srcs/init_philo.c #srcs/free_philo.c
+SRCS        :=  philo.c srcs/init_input.c srcs/utils.c srcs/init_philo.c srcs/action.c srcs/print.c
 
 # OBJS FILES
 OBJS        := $(SRCS:.c=.o)

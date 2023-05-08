@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:36:46 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/02 10:24:35 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 23:27:33 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,29 @@ long long	current_time(void)
 	long long		result;
 
 	gettimeofday(&time, NULL);
-	result = (time.tv_sec * 1000) + (time.tv_usec / 1000); // milliseconds formula!
+	result = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 	return (result);
+}
+
+long long	convert_time(t_philo *ph)
+{
+	return (current_time() - ph->philo_input->start_time);
+}
+
+long long	wait_time(long long time)
+{
+	long long	cur_time;
+	long long	start_time;
+
+	start_time = current_time();
+	cur_time = 0;
+	while (1)
+	{
+		cur_time = current_time() - start_time;
+		if (cur_time >= time)
+			return (1);
+	}
+	return (0);
 }
 
 int	ft_str_is_numeric(char *str)

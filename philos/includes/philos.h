@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:58 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/02 10:24:34 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 23:26:50 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-# define	TRUE 1
-# define	FALSE 0
-
-# define	EATING 1
-# define	SLEEPING 2
-# define	THINKING 3
+# define TRUE 1
+# define FALSE 0
 
 typedef struct s_input
 {
@@ -56,7 +52,6 @@ typedef struct s_philo
 	int						finish;
 }							t_philo;
 
-
 typedef struct s_root
 {
 	t_input	input;
@@ -64,9 +59,16 @@ typedef struct s_root
 }	t_root;
 
 long long	current_time(void);
+long long	wait_time(long long time);
+long long	convert_time(t_philo *ph);
 int			ft_atoi(const char *str);
 int			ft_str_is_numeric(char *str);
-void		free_philos(t_philo *philo);
 int			init_philo(t_root *root);
 int			init_input(int argc, char **argv, t_root *root);
+void		*simulation(void *philo);
+void		try_to_eat_odd(t_philo *ph);
+void		try_to_eat_even(t_philo *ph);
+void		sleep_and_think(t_philo *ph);
+int			is_dead(t_philo *ph);
+void		print_action(t_philo *ph, char *action);
 #endif

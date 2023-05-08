@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_root->input->c                                       :+:      :+:    :+:   */
+/*   init_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmaciel- <hmaciel-@student->42->fr>          +#+  +:+       +#+        */
+/*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/22 09:41:55 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/04/26 16:26:56 by hmaciel-         ###   ########->fr       */
+/*   Created: 2023/05/08 23:28:55 by hmaciel-          #+#    #+#             */
+/*   Updated: 2023/05/08 23:29:35 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 static int	is_valid_params(int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
-	while(i < argc)
+	while (i < argc)
 	{
-		if(ft_str_is_numeric(argv[i]) == FALSE)
+		if (ft_str_is_numeric(argv[i]) == FALSE)
 			return (FALSE);
 		i++;
 	}

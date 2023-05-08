@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 17:15:51 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/02 11:42:22 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 23:28:17 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	init_philo(t_root *root)
 	if (!root->philo)
 		return (FALSE);
 	i = 0;
-	while(i < root->input.number_of_philosophers)
+	while (i < root->input.number_of_philosophers)
 	{
 		root->philo[i].id = i + 1;
 		root->philo[i].ms_eat = root->input.start_time;
