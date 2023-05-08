@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 23:02:26 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/08 23:47:34 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 23:59:39 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	*simulation(void *philo)
 		if (is_dead(ph))
 			break ;
 		if (all_philo_ate(ph))
-			exit (0) ;
+			break ;
 		if (ph->id % 2 == 0)
 			try_to_eat_even(ph);
 		else
