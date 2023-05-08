@@ -37,7 +37,7 @@ void	*thread(void *data)
 		pthread_detach(ph->thread_death_id);
 		if ((int)++ph->nb_eat == ph->pa->m_eat)
 		{
-			pthread_mutex_lock(&ph->pa->finish);
+			pthread_mutex_lock(&phs->pa->finish);
 			ph->finish = 1;
 			ph->pa->nb_p_finish++;
 			if (ph->pa->nb_p_finish == ph->pa->total)

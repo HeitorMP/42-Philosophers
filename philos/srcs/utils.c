@@ -12,7 +12,7 @@
 
 #include "../includes/philos.h"
 
-long long	time_in_milliseconds(void)
+long long	current_time(void)
 {
 	struct timeval	time;
 	long long		result;

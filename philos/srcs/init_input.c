@@ -26,28 +26,30 @@ static int	is_valid_params(int argc, char **argv)
 	return (TRUE);
 }
 
-static int	check_input_errors(int argc, char **argv)
+static int	has_input_errors(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
 	{
 		printf("Missing/More params!\n");
-		return (FALSE);
+		return (TRUE);
 	}
 	if (is_valid_params(argc, argv) == FALSE)
 	{
 		printf("Non numeric params!\n");
-		return (FALSE);
+		return (TRUE);
 	}
 	if (ft_atoi(argv[1]) < 1)
 	{
 		printf("Invalid number of philos!\n");
-		return (FALSE);
+		return (TRUE);
 	}
-	return (TRUE);
+	return (FALSE);
 }
 
-void	init_input(int argc, char **argv, t_root *root)
+int	init_input(int argc, char **argv, t_root *root)
 {
+	if (has_input_errors(argc, argv) == TRUE)
+		return (FALSE);
 	root->input.number_of_philosophers = ft_atoi(argv[1]);
 	root->input.time_to_die = ft_atoi(argv[2]);
 	root->input.time_to_eat = ft_atoi(argv[3]);
@@ -55,4 +57,11 @@ void	init_input(int argc, char **argv, t_root *root)
 	root->input.times_each_philo_must_eat = 0;
 	if (argc == 6)
 		root->input.times_each_philo_must_eat = ft_atoi(argv[5]);
+	pthread_mutex_init(&root->input.print_mutex, NULL);
+	pthread_mutex_init(&root->input.eat_mutex, NULL);
+	pthread_mutex_init(&root->input.dead_mutex, NULL);
+	pthread_mutex_init(&root->input.finish_mutex, NULL);
+	root->input.start_time = current_time();
+	root->input.nb_p_finish = 0;
+	return (TRUE);
 }

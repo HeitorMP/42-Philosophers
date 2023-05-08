@@ -35,6 +35,21 @@ void	stop(t_p *p)
 	if (p->a.stop == 2)
 		printf("Each philosopher ate %d time(s)\n", p->a.m_eat);
 	free(p->ph);
+long long	is_event_end(long long event)
+{
+	long long cur_time;
+	long long start_time;
+
+	start_time = time_in_milliseconds();
+	cur_time = 0;
+	while (1)
+	{
+		cur_time = time_in_milliseconds() - start_time;
+		if (cur_time >= event)
+			return (1);
+	}
+	return (0);
+}
 }
 
 int	main(int argc, char **argv)

@@ -28,35 +28,45 @@
 
 typedef struct s_input
 {
-	int	number_of_philosophers;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	times_each_philo_must_eat;
+	int						number_of_philosophers;
+	int						time_to_die;
+	int						time_to_eat;
+	int						time_to_sleep;
+	int						times_each_philo_must_eat;
+	int						mili_eat;
+	long int				start_time;
+	pthread_mutex_t			print_mutex;
+	pthread_mutex_t			dead_mutex;
+	pthread_mutex_t			eat_mutex;
+	pthread_mutex_t			finish_mutex;
+	int						nb_p_finish;
+	int						stop;
 }	t_input;
 
 typedef struct s_philo
 {
-	int			philo_id;
-	char		action;
-	int			is_alive;
-	int			has_left_fork;
-	int			has_right_fork;
-	pthread_t	thread;
-}	t_philo;
+	int						id;
+	pthread_t				thread_id;
+	pthread_t				thread_death_id;
+	pthread_mutex_t			*right_fork;
+	pthread_mutex_t			left_fork;
+	t_input					*philo_input;
+	long int				ms_eat;
+	unsigned int			nb_eat;
+	int						finish;
+}							t_philo;
+
 
 typedef struct s_root
 {
-	long long	curr_time;
-	t_philo		*philo;
-	t_input		input;
-	pthread_mutex_t *fork;
+	t_input	input;
+	t_philo	*philo;
 }	t_root;
 
-long long	time_in_milliseconds(void);
+long long	current_time(void);
 int			ft_atoi(const char *str);
 int			ft_str_is_numeric(char *str);
 void		free_philos(t_philo *philo);
-void		init_philo(t_root *root);
-void		init_input(int argc, char **argv, t_root *root);
+int			init_philo(t_root *root);
+int			init_input(int argc, char **argv, t_root *root);
 #endif

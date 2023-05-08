@@ -49,104 +49,155 @@ The Thread Analyzer detects data-races that occur during the execution of a mult
 /* TEMPORARY STRUCTS*/
 
 #include "./includes/philos.h"
+#include <stdio.h>
 
-long long	is_event_end(long long event)
+long long	convert_time(t_philo *ph)
+{
+	return (current_time() - ph->philo_input->start_time);
+}
+
+int	is_dead(t_philo *ph)
+{
+	printf("\n eat %lld\n", (long)ph->ms_eat);
+	if ((current_time() - ph->ms_eat) >= (long)ph->philo_input->time_to_die)
+		return (TRUE);
+	return (FALSE);
+}
+
+long long	wait_time(long long time)
 {
 	long long cur_time;
 	long long start_time;
 
-	start_time = time_in_milliseconds();
+	start_time = current_time();
 	cur_time = 0;
 	while (1)
 	{
-		cur_time = time_in_milliseconds() - start_time;
-		if (cur_time >= event)
+		cur_time = current_time() - start_time;
+		if (cur_time >= time)
 			return (1);
 	}
 	return (0);
 }
 
-void	print_event(t_root *root)
+void	sleep_think(t_philo *ph)
 {
-	int i = 0;
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, is sleeping\n", convert_time(ph), ph->id);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	wait_time(ph->philo_input->time_to_sleep);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, is thinking\n", convert_time(ph), ph->id);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+}
+
+void	try_to_eat_even(t_philo *ph)
+{
+	pthread_mutex_lock(&ph->left_fork);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, has taken a fork\n", convert_time(ph), ph->id);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	pthread_mutex_lock(ph->right_fork);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, has taken a fork\n", convert_time(ph), ph->id);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, is eating\n", convert_time(ph), ph->id);
+	ph->ms_eat = current_time();
+	pthread_mutex_lock(&ph->philo_input->eat_mutex);
+	pthread_mutex_unlock(&ph->philo_input->eat_mutex);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	wait_time(ph->philo_input->time_to_eat);
+	pthread_mutex_unlock(ph->right_fork);
+	pthread_mutex_unlock(&ph->left_fork);
+	sleep_think(ph);
+}
+
+void	try_to_eat_odd(t_philo *ph)
+{
+	pthread_mutex_lock(ph->right_fork);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, has taken a fork\n", convert_time(ph), ph->id);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	pthread_mutex_lock(&ph->left_fork);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, has taken a fork\n", convert_time(ph), ph->id);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	pthread_mutex_lock(&ph->philo_input->print_mutex);
+	printf("%lld - %d, is eating\n", convert_time(ph), ph->id);
+	ph->ms_eat = current_time();
+	pthread_mutex_lock(&ph->philo_input->eat_mutex);
+	pthread_mutex_unlock(&ph->philo_input->eat_mutex);
+	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	wait_time(ph->philo_input->time_to_eat);
+	pthread_mutex_unlock(ph->right_fork);
+	pthread_mutex_unlock(&ph->left_fork);
+	sleep_think(ph);
+}
+
+void	*simulation(void *philo)
+{
+	t_philo	*ph;
+
+	ph = (t_philo *)philo;
+
+	while (1)
+	{
+		if (ph->id % 2 == 0)
+			try_to_eat_even(ph);
+		else
+			try_to_eat_odd(ph);
+
+		if (is_dead(ph))
+		{
+			printf("morreu");
+			exit (0);
+		}
+	}
+	return (NULL);
+
+}
+
+int	init_threads(t_root *root)
+{
+	int	i;
+
+	i = 0;
+	//while (i < root->input.number_of_philosophers)
 	while (i < root->input.number_of_philosophers)
 	{
-		printf("%lld - philo: %d - ", root->curr_time, root->philo[i].philo_id);
-		if (root->philo[i].action == 0)
-			printf("is thinking\n");
-		if (root->philo[i].action == 1)
-			printf("is eating\n");
-		if (root->philo[i].action == 2)
-			printf("is sleeping\n");
-		if (root->philo[i].action == 3)
-			printf("sofrendo por amor:\n");
+		root->philo[i].philo_input = &root->input;
+		if (pthread_create(&root->philo[i].thread_id, NULL, simulation, &root->philo[i]) != 0)
+			return (FALSE);
 		i++;
 	}
+	return (TRUE);
 }
 
-int	can_eat(t_philo *philo, t_root *root)
-{
-	if (root->philo->philo_id == root->input.number_of_philosophers)
-	{
-		if (pthread_mutex_lock(&root->fork[root->philo->philo_id - 1]) == 0 && pthread_mutex_lock(&root->fork[0]) == 0)
-		{
-			philo->action = 1;
-			return (1);
-		}
-	}
-	else
-	{
-		if (pthread_mutex_lock(&root->fork[root->philo->philo_id - 1]) == 0 && pthread_mutex_lock(&root->fork[root->philo->philo_id]) == 0)
-		{
-			philo->action = 1;
-			return (1);
-		}
-	}
-	return (0);
-}
-
-void *myThreadFun(void *vargp)
-{
-	t_root *root;
-	root = (t_root *)vargp;
-
-	if (can_eat(root->philo, root))
-	{
-		if (is_event_end(root->input.time_to_eat))
-		{
-			pthread_mutex_unlock(&root->fork[root->philo->philo_id - 1]);
-			pthread_mutex_unlock(&root->fork[root->philo->philo_id]);
-			root->philo->action = 2;
-		}
-	}
-    return NULL;
-}
 
 int main(int argc, char **argv)
 {
 	t_root	root;
 	
-	init_input(argc, argv, &root);
-	init_philo(&root);
-	int i = 0;
-	while (i < root.input.number_of_philosophers)
+	if (init_input(argc, argv, &root) == FALSE)
 	{
-		pthread_mutex_init(&root.fork[i], NULL);
+		write(2, "Error: ", 7);
+		exit(1);
+	}
+	if (init_philo(&root) == FALSE)
+	{
+		write(2, "Philo error", 11);
+		exit(1);
+	}
+	if (init_threads(&root) == FALSE)
+	{
+		write(2, "threads error", 13);
+		exit(1);
+	}
+	int	i = 0;
+	while(i < root.input.number_of_philosophers)
+	{
+		pthread_join(root.philo[i].thread_id, NULL);
 		i++;
 	}
-
-	i = 0;
-	
-	long long start_time;
-	
-	start_time = time_in_milliseconds();
-	while (i < root.input.number_of_philosophers)
-	{
-		root.curr_time = time_in_milliseconds() - start_time;
-		pthread_create(&root.philo[i].thread, NULL, myThreadFun, &root);
-		pthread_join(root.philo[i].thread, NULL);
-		print_event(&root);
-		i++;
-	}
-	printf("morreu!");
 }
