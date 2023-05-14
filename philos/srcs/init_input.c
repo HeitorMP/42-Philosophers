@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_input.c                                       :+:      :+:    :+:   */
+/*   init_rt->input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 23:28:55 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/08 23:29:35 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/14 22:23:44 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,21 @@ static int	has_input_errors(int argc, char **argv)
 	return (FALSE);
 }
 
-int	init_input(int argc, char **argv, t_root *root)
+int	init_input(int argc, char **argv, t_root *rt)
 {
 	if (has_input_errors(argc, argv) == TRUE)
 		return (FALSE);
-	root->input.number_of_philosophers = ft_atoi(argv[1]);
-	root->input.time_to_die = ft_atoi(argv[2]);
-	root->input.time_to_eat = ft_atoi(argv[3]);
-	root->input.time_to_sleep = ft_atoi(argv[4]);
-	root->input.times_each_philo_must_eat = 0;
+	rt->input.number_of_philosophers = ft_atoi(argv[1]);
+	rt->input.time_to_die = ft_atoi(argv[2]);
+	rt->input.time_to_eat = ft_atoi(argv[3]);
+	rt->input.time_to_sleep = ft_atoi(argv[4]);
+	rt->input.times_each_philo_must_eat = 0;
 	if (argc == 6)
-		root->input.times_each_philo_must_eat = ft_atoi(argv[5]);
-	pthread_mutex_init(&root->input.print_mutex, NULL);
-	pthread_mutex_init(&root->input.eat_mutex, NULL);
-	pthread_mutex_init(&root->input.dead_mutex, NULL);
-	pthread_mutex_init(&root->input.finish_mutex, NULL);
-	root->input.start_time = current_time();
-	root->input.nb_p_finish = 0;
+		rt->input.times_each_philo_must_eat = ft_atoi(argv[5]);
+	pthread_mutex_init(&rt->input.print_mutex, NULL);
+	pthread_mutex_init(&rt->input.eat_mutex, NULL);
+	pthread_mutex_init(&rt->input.dead_mutex, NULL);
+	pthread_mutex_init(&rt->input.finish_mutex, NULL);
+	rt->input.start_time = 0;
 	return (TRUE);
 }

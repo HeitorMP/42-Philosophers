@@ -6,13 +6,13 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:36:46 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/08 23:27:33 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/14 23:29:12 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philos.h"
 
-long long	current_time(void)
+long	current_time(void)
 {
 	struct timeval	time;
 	long long		result;
@@ -22,7 +22,7 @@ long long	current_time(void)
 	return (result);
 }
 
-long long	convert_time(t_philo *ph)
+long	convert_time(t_philo *ph)
 {
 	return (current_time() - ph->philo_input->start_time);
 }
