@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 22:37:48 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/14 23:54:20 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/16 23:12:53 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,5 @@ int	init_threads(t_philo *ph, t_input *input)
 		i++;
 	}
 	pthread_join(thread_dead, NULL);
-	printf("unidas");
 	return (TRUE);
 }

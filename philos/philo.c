@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/14 23:34:39 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/16 23:09:29 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char **argv)
 	}
  	if (init_threads(ph, &input) == FALSE)
 	{
-		write(2, "threads error", 13);
+		write(2, "Threads error", 13);
 		exit(1);
 	}
 	free(ph);
