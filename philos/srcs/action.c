@@ -38,7 +38,7 @@ void	sleep_and_think(t_philo *ph)
 	print_action(ph, "is thinking");
 }
 
-/* void	try_to_eat_even(t_philo *ph)
+void	try_to_eat_even(t_philo *ph)
 {
 	pthread_mutex_lock(&ph->left_fork);
 	print_action(ph, "has taken a fork");
@@ -53,13 +53,13 @@ void	sleep_and_think(t_philo *ph)
 	pthread_mutex_unlock(&ph->left_fork);
 	pthread_mutex_unlock(ph->right_fork);
 	sleep_and_think(ph);
-} */
+}
 
  void	try_to_eat_odd(t_philo *ph)
 {
 	pthread_mutex_lock(ph->right_fork);
-	print_action(ph, "has taken a fork");
 	pthread_mutex_lock(&ph->left_fork);
+	print_action(ph, "has taken a fork");
 	print_action(ph, "has taken a fork");
 	print_action(ph, "is eating");
 	pthread_mutex_lock(&ph->philo_input->eat_mutex);
@@ -80,15 +80,13 @@ void	*simulation(void *philo)
 	int i = 0;
   	while (ph->philo_input->stop != 1)
 	{
- 		if (ph->id % 2 == 0 && ph->philo_input->first_run)
+		if (ph->id % 2 == 0 && ph->philo_input->first_run)
 		{
-			usleep(300);
-			ph->philo_input->first_run = 0;
+			ph->philo_input->first_run = 1;
+			try_to_eat_even(ph);
 		}
 		else
-		{
 			try_to_eat_odd(ph);
-		}
 	}
 	return (NULL);
 }
