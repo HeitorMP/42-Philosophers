@@ -2,7 +2,7 @@
 # VAR DECLARATION
 NAME			:= philo
 CC				:= cc
-FLAGS			:= -Wall -Wextra -Werror -g -lpthread #-fsanitize=thread
+FLAGS			:= -Wall -Wextra -Werror -g -lpthread -fsanitize=thread
 RM				:= rm -f
 
 # SOURCE FILES

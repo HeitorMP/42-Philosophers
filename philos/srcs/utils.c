@@ -24,7 +24,7 @@ long	current_time(void)
 
 long	convert_time(t_philo *ph)
 {
-	return (current_time() - ph->philo_input->start_time);
+	return (current_time() - ph->start_time);
 }
 
 long long	wait_time(long long time)

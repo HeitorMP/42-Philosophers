@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_rt->input.c                                       :+:      :+:    :+:   */
+/*   init_input->c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -26,7 +26,7 @@ static int	is_valid_params(int argc, char **argv)
 	return (TRUE);
 }
 
-static int	has_input_errors(int argc, char **argv)
+static int	has_rrors(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
 	{
@@ -46,21 +46,22 @@ static int	has_input_errors(int argc, char **argv)
 	return (FALSE);
 }
 
-int	init_input(int argc, char **argv, t_root *rt)
+int	init_input(int argc, char **argv, t_input *input)
 {
-	if (has_input_errors(argc, argv) == TRUE)
+	int i = 0;
+	if (has_rrors(argc, argv) == TRUE)
 		return (FALSE);
-	rt->input.number_of_philosophers = ft_atoi(argv[1]);
-	rt->input.time_to_die = ft_atoi(argv[2]);
-	rt->input.time_to_eat = ft_atoi(argv[3]);
-	rt->input.time_to_sleep = ft_atoi(argv[4]);
-	rt->input.times_each_philo_must_eat = 0;
+	input->number_of_philosophers = ft_atoi(argv[1]);
+	input->time_to_die = ft_atoi(argv[2]);
+	input->time_to_eat = ft_atoi(argv[3]);
+	input->time_to_sleep = ft_atoi(argv[4]);
+	input->times_each_philo_must_eat = -1;
+	input->first_run = 1;
 	if (argc == 6)
-		rt->input.times_each_philo_must_eat = ft_atoi(argv[5]);
-	pthread_mutex_init(&rt->input.print_mutex, NULL);
-	pthread_mutex_init(&rt->input.eat_mutex, NULL);
-	pthread_mutex_init(&rt->input.dead_mutex, NULL);
-	pthread_mutex_init(&rt->input.finish_mutex, NULL);
-	rt->input.start_time = 0;
+		input->times_each_philo_must_eat = ft_atoi(argv[5]);
+	pthread_mutex_init(&input->print_mutex, NULL);
+	pthread_mutex_init(&input->eat_mutex, NULL);
+	pthread_mutex_init(&input->dead_mutex, NULL);
+	input->stop = 0;
 	return (TRUE);
 }

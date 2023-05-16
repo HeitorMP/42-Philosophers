@@ -15,23 +15,26 @@
 
 int	main(int argc, char **argv)
 {
-	t_root	rt;
+	t_philo	*ph;
+	t_input	input;
+
 	int		i;
 
-	if (init_input(argc, argv, &rt) == FALSE)
+	if (init_input(argc, argv, &input) == FALSE)
 	{
 		write(2, "Error: ", 7);
 		exit(1);
 	}
-	rt.ph = malloc(sizeof(t_philo) * rt.input.number_of_philosophers);
-	if (!init_philo(&rt))
+	ph = init_philo(&input);
+	if (!ph)
 	{
 		write(2, "Philo error", 11);
 		exit(1);
 	}
- 	if (init_threads(&rt) == FALSE)
+ 	if (init_threads(ph, &input) == FALSE)
 	{
 		write(2, "threads error", 13);
 		exit(1);
 	}
+	free(ph);
 }

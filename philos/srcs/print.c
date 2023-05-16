@@ -14,7 +14,10 @@
 
 void	print_action(t_philo *ph, char *action)
 {
-	pthread_mutex_lock(&ph->philo_input->print_mutex);
-	printf("%ldms: Philo-%d, %s\n", convert_time(ph), ph->id, action);
-	pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	if (!ph->philo_input->stop)
+	{
+		pthread_mutex_lock(&ph->philo_input->print_mutex);
+		printf("%ldms: Philo-%d, %s\n", convert_time(ph), ph->id, action);
+		pthread_mutex_unlock(&ph->philo_input->print_mutex);
+	}
 }

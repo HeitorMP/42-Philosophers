@@ -12,29 +12,31 @@
 
 #include "../includes/philos.h"
 
-int	init_threads(t_root *rt)
+int	init_threads(t_philo *ph, t_input *input)
 {
 	int			i;
 	pthread_t	thread_dead;
+	long int	start;
 
-	i = 0;
-	pthread_create(&thread_dead, NULL, monitoring_dead, &rt->ph[i]);
-	while (i < rt->input.number_of_philosophers)
+ 	i = 0;
+	start = current_time();
+	while (i < input->number_of_philosophers)
 	{
-		rt->input.start_time = current_time();
-		rt->ph[i].last_meal = rt->input.start_time;
-		rt->ph[i].philo_input = &rt->input;
-		if (pthread_create(&rt->ph[i].thread_id, NULL, \
-			simulation, &rt->ph[i]) != 0)
+		ph[i].start_time = start;
+		ph[i].last_meal = start;
+		if (pthread_create(&ph[i].thread_id, NULL, \
+			simulation, (void *)&ph[i]) != 0)
 			return (FALSE);
 		i++;
 	}
 	i = 0;
-	pthread_join(thread_dead, NULL);
-	while (i < rt->input.number_of_philosophers)
+	pthread_create(&thread_dead, NULL, monitoring_dead, (void *)ph);
+  	while (i < input->number_of_philosophers)
 	{
-		pthread_join(rt->ph[i].thread_id, NULL);
+		pthread_join(ph[i].thread_id, NULL);
 		i++;
 	}
+	pthread_join(thread_dead, NULL);
+	printf("unidas");
 	return (TRUE);
 }
