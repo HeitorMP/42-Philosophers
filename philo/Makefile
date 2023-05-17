@@ -4,16 +4,12 @@ NAME			:= philo
 CC				:= cc
 FLAGS			:= -Wall -Wextra -Werror -g -pthread -fsanitize=thread
 RM				:= rm -f
+SRCDIR			:= srcs
+OBJSDIR			:= objs
 
 # SOURCE FILES
-SRCS        :=  philo.c srcs/init_input.c srcs/utils.c srcs/init_philo.c srcs/action.c srcs/print.c \
-				srcs/init_threads.c
-
-# OBJS FILES
-OBJS        := $(SRCS:.c=.o)
-
-.c.o:
-	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
+SRCS        :=  philo.c init_input.c utils.c init_philo.c action.c print.c init_threads.c
+OBJS		= $(SRCS:%.c=$(OBJSDIR)/%.o)
 
 # COLORS
 CLR_RMV		:= \033[0m
@@ -25,10 +21,15 @@ CYAN 		:= \033[1;36m
 
 
 # EXECUTION
-${NAME}:	${OBJS} ${LIBFT}
+${NAME}:	${OBJS}
 			@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
 			${CC} ${FLAGS} -o ${NAME} ${OBJS}
 			@echo "$(GREEN)$(NAME) created[0m ✔️"
+
+# CREATE OBJS
+${OBJS}: $(OBJSDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(@D)
+	${CC} ${FLAGS} -c $< -o $@
 
 all:		${NAME}
 

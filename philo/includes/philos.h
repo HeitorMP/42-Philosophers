@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:58 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/17 15:27:59 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:19:33 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ typedef struct s_input
 	int						stop;
 	int						first_run;
 	pthread_mutex_t			print_mutex;
-	pthread_mutex_t			dead_mutex;
-	pthread_mutex_t			eat_mutex;
 }	t_input;
 
 typedef struct s_philo
@@ -42,6 +40,7 @@ typedef struct s_philo
 	pthread_t				thread_id;
 	pthread_mutex_t			left_fork;
 	pthread_mutex_t			*right_fork;
+	pthread_mutex_t			dead_mutex;
 	long int				last_meal;
 	int						number_of_eats;
 	long int				start_time;

@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 23:02:26 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/17 15:30:27 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:34:34 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ void	try_to_eat_even(t_philo *ph)
 	print_action(ph, "has taken a fork");
 	pthread_mutex_lock(ph->right_fork);
 	print_action(ph, "has taken a fork");
+	pthread_mutex_lock(&ph->dead_mutex);
 	print_action(ph, "is eating");
-	pthread_mutex_lock(&ph->philo_input->eat_mutex);
 	ph->last_meal = current_time();
-	ph->number_of_eats++;
-	pthread_mutex_unlock(&ph->philo_input->eat_mutex);
+	pthread_mutex_unlock(&ph->dead_mutex);
 	usleep(ph->philo_input->time_to_eat * 1000);
 	pthread_mutex_unlock(&ph->left_fork);
 	pthread_mutex_unlock(ph->right_fork);
+	ph->number_of_eats++;
 }
 
  void	try_to_eat_odd(t_philo *ph)
@@ -61,14 +61,14 @@ void	try_to_eat_even(t_philo *ph)
 	print_action(ph, "has taken a fork");
 	pthread_mutex_lock(&ph->left_fork);
 	print_action(ph, "has taken a fork");
+	pthread_mutex_lock(&ph->dead_mutex);
 	print_action(ph, "is eating");
-	pthread_mutex_lock(&ph->philo_input->eat_mutex);
 	ph->last_meal = current_time();
-	ph->number_of_eats++;
-	pthread_mutex_unlock(&ph->philo_input->eat_mutex);
+	pthread_mutex_unlock(&ph->dead_mutex);
 	usleep(ph->philo_input->time_to_eat * 1000);
 	pthread_mutex_unlock(ph->right_fork);
 	pthread_mutex_unlock(&ph->left_fork);
+	ph->number_of_eats++;
 }
 
 void	*simulation(void *philo)
@@ -76,15 +76,13 @@ void	*simulation(void *philo)
 	t_philo	*ph;
 
 	ph = (t_philo *)philo;
-  	while (ph->philo_input->stop != 1)
+  	while (1)
 	{
 		if (ph->id % 2 == 0)
 				try_to_eat_even(ph);
 		else
 				try_to_eat_odd(ph);
 		sleep_and_think(ph);
-		if (is_dead(ph))
-			break ;
 	}
 	return (NULL);
 }
@@ -95,36 +93,28 @@ void	*monitoring_dead(void *philo)
 	int	i;
 
 	i = 0;
-	int j = 0;
 	ph = (t_philo *)philo;
-	printf("input after: %p", ph->philo_input);
-  	while(ph->philo_input->stop != 1)
+  	while(1)
 	{
 		while (i < ph->philo_input->number_of_philosophers)
 		{
+			pthread_mutex_lock(&ph[i].dead_mutex);
 			if (is_dead(&ph[i]))
 			{
-				pthread_mutex_lock(&ph->philo_input->dead_mutex);
+				ph->philo_input->stop = 1;
 				print_action(&ph[i], "is dead");
-				j = 0;
-				while (j < ph->philo_input->number_of_philosophers)
-				{
-					ph[j].philo_input->stop = 1;
-					j++;
-				}
-				pthread_mutex_unlock(&ph->philo_input->dead_mutex);
+				pthread_mutex_unlock(&ph[i].dead_mutex);
+				return (NULL);
 			}
+			pthread_mutex_unlock(&ph[i].dead_mutex);
 			i++;
 		}
-		i = 0;
- 		if (all_philo_ate(ph) && ph->philo_input->times_each_philo_must_eat != -1)
+/*  		if (all_philo_ate(ph) && ph->philo_input->times_each_philo_must_eat != -1)
 		{
-			while (i < ph->philo_input->number_of_philosophers)
-			{
-				ph[i].philo_input->stop = 1;
-				i++;
-			}
-		}
-	} */
+			ph->philo_input->stop = 1;
+			return (NULL);
+		} */
+		i = 0;
+	}
 	return (NULL);
 }

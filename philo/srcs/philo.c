@@ -6,11 +6,11 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/17 15:28:12 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:33:08 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/philos.h"
+#include "../includes/philos.h"
 #include <stdio.h>
 
 int	main(int argc, char **argv)

@@ -59,8 +59,6 @@ int	init_input(int argc, char **argv, t_input *input)
 	if (argc == 6)
 		input->times_each_philo_must_eat = ft_atoi(argv[5]);
 	pthread_mutex_init(&input->print_mutex, NULL);
-	pthread_mutex_init(&input->eat_mutex, NULL);
-	pthread_mutex_init(&input->dead_mutex, NULL);
 	input->stop = 0;
 	return (TRUE);
 }
