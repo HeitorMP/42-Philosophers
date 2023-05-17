@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 23:02:26 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/16 23:20:46 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:30:27 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	*simulation(void *philo)
 	t_philo	*ph;
 
 	ph = (t_philo *)philo;
-	int i = 0;
   	while (ph->philo_input->stop != 1)
 	{
 		if (ph->id % 2 == 0)
@@ -98,7 +97,8 @@ void	*monitoring_dead(void *philo)
 	i = 0;
 	int j = 0;
 	ph = (t_philo *)philo;
- 	while(ph->philo_input->stop != 1)
+	printf("input after: %p", ph->philo_input);
+  	while(ph->philo_input->stop != 1)
 	{
 		while (i < ph->philo_input->number_of_philosophers)
 		{
@@ -125,6 +125,6 @@ void	*monitoring_dead(void *philo)
 				i++;
 			}
 		}
-	}
+	} */
 	return (NULL);
 }

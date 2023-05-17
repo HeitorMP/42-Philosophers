@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:24 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/16 23:09:29 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:28:12 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	main(int argc, char **argv)
 {
 	t_philo	*ph;
 	t_input	input;
-
-	int		i;
 
 	if (init_input(argc, argv, &input) == FALSE)
 	{

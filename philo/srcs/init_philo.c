@@ -25,7 +25,7 @@ t_philo	 *init_philo(t_input *input)
 		ph[i].last_meal = 0;
 		ph[i].number_of_eats = 0;
 		ph[i].start_time = 0;
-		ph[i].philo_input = input;
+		//ph[i].philo_input = input;
 		pthread_mutex_init(&ph[i].left_fork, NULL);
 		ph[i].right_fork = NULL;
 		if (input->number_of_philosophers == 1)

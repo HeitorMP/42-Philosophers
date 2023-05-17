@@ -2,7 +2,7 @@
 # VAR DECLARATION
 NAME			:= philo
 CC				:= cc
-FLAGS			:= -Wall -Wextra -Werror -g -lpthread -fsanitize=thread
+FLAGS			:= -Wall -Wextra -Werror -g -pthread -fsanitize=thread
 RM				:= rm -f
 
 # SOURCE FILES
@@ -13,7 +13,7 @@ SRCS        :=  philo.c srcs/init_input.c srcs/utils.c srcs/init_philo.c srcs/ac
 OBJS        := $(SRCS:.c=.o)
 
 .c.o:
-	${CC} -c $< -o ${<:.c=.o}
+	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
 # COLORS
 CLR_RMV		:= \033[0m

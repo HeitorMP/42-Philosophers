@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 22:37:48 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/16 23:12:53 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:30:16 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,20 @@ int	init_threads(t_philo *ph, t_input *input)
 	{
 		ph[i].start_time = start;
 		ph[i].last_meal = start;
+		ph[i].philo_input = input;
+		printf("input before %p", input);
+		i++;
+	}
+	i = 0;
+	while (i < input->number_of_philosophers)
+	{
 		if (pthread_create(&ph[i].thread_id, NULL, \
 			simulation, (void *)&ph[i]) != 0)
 			return (FALSE);
 		i++;
 	}
 	i = 0;
-	pthread_create(&thread_dead, NULL, monitoring_dead, (void *)ph);
+	pthread_create(&thread_dead, NULL, monitoring_dead, ph);
   	while (i < input->number_of_philosophers)
 	{
 		pthread_join(ph[i].thread_id, NULL);

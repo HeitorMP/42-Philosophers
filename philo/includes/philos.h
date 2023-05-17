@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:30:58 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/16 22:54:47 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:27:59 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_philo
 	pthread_mutex_t			left_fork;
 	pthread_mutex_t			*right_fork;
 	long int				last_meal;
-	unsigned int			number_of_eats;
+	int						number_of_eats;
 	long int				start_time;
 	t_input					*philo_input;
 }							t_philo;

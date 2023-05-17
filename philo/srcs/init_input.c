@@ -48,7 +48,6 @@ static int	has_rrors(int argc, char **argv)
 
 int	init_input(int argc, char **argv, t_input *input)
 {
-	int i = 0;
 	if (has_rrors(argc, argv) == TRUE)
 		return (FALSE);
 	input->number_of_philosophers = ft_atoi(argv[1]);
