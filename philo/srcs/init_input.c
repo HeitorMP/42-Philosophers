@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_input->c                                       :+:      :+:    :+:   */
+/*   init_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/08 23:28:55 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/14 22:23:44 by hmaciel-         ###   ########.fr       */
+/*   Created: 2023/05/18 12:20:42 by hmaciel-          #+#    #+#             */
+/*   Updated: 2023/05/18 12:35:41 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,12 @@ int	init_input(int argc, char **argv, t_input *input)
 	input->time_to_eat = ft_atoi(argv[3]);
 	input->time_to_sleep = ft_atoi(argv[4]);
 	input->times_each_philo_must_eat = -1;
-	input->first_run = 1;
 	if (argc == 6)
 		input->times_each_philo_must_eat = ft_atoi(argv[5]);
+	if (input->times_each_philo_must_eat == 0)
+		return (FALSE);
 	pthread_mutex_init(&input->print_mutex, NULL);
+	pthread_mutex_init(&input->dead_mutex, NULL);
 	input->stop = 0;
 	return (TRUE);
 }
