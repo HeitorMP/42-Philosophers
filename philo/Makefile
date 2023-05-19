@@ -2,7 +2,7 @@
 # VAR DECLARATION
 NAME			:= philo
 CC				:= cc
-FLAGS			:= -Wall -Wextra -Werror -g -pthread -fsanitize=thread
+FLAGS			:= -Wall -Wextra -Werror -g -pthread -fsanitize=thread 
 RM				:= rm -f
 SRCDIR			:= srcs
 OBJSDIR			:= objs

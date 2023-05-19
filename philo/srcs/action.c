@@ -6,13 +6,13 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 23:02:26 by hmaciel-          #+#    #+#             */
-/*   Updated: 2023/05/18 12:48:34 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:03:41 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philos.h"
 
-void	try_to_eat_even(t_philo *ph)
+void	try_to_eat_odd(t_philo *ph)
 {
 	pthread_mutex_lock(ph->right_fork);
 	pthread_mutex_lock(&ph->left_fork);
@@ -29,7 +29,7 @@ void	try_to_eat_even(t_philo *ph)
 	sleep_and_think(ph);
 }
 
-void	try_to_eat_odd(t_philo *ph)
+void	try_to_eat_even(t_philo *ph)
 {		
 	pthread_mutex_lock(&ph->left_fork);
 	pthread_mutex_lock(ph->right_fork);
@@ -76,7 +76,8 @@ static int	inner_check_death(t_philo *ph)
 		pthread_mutex_lock(&ph->philo_input->dead_mutex);
 		if (is_dead(&ph[i]))
 		{
-			printf(" Philo %d, is dead!", ph[i].id);
+			printf("%ldms: Philo %d, is dead!", \
+				current_time() - ph->start_time, ph[i].id);
 			ph->philo_input->stop = 1;
 			pthread_mutex_unlock(&ph->philo_input->dead_mutex);
 			return (TRUE);
